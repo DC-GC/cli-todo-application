@@ -3,7 +3,11 @@ package main
 import (
 	"errors"
 	"fmt"
+	"os"
+	"strconv"
 	"time"
+
+	"github.com/aquasecurity/table"
 )
 
 type Activity struct {
@@ -79,4 +83,25 @@ func (todoList *TodoList) update(i int, title string) error {
 	t[i].CompletedOn = &updateTime
 
 	return nil
+}
+
+func (todoList *TodoList) displayAll() {
+	displayTable := table.New(os.Stdout)
+	displayTable.SetRowLines(false)
+	displayTable.SetHeaders("", "Activity", "Completed", "Created At", "Completed At", "Last Updated")
+	displayTable.SetAlignment(table.AlignCenter, table.AlignLeft, table.AlignCenter, table.AlignLeft, table.AlignLeft, table.AlignLeft)
+	for index, t := range *todoList {
+		completed := "❌"
+		completedOn := ""
+
+		if t.Completed {
+			completed = "✅"
+			if t.CompletedOn != nil {
+				completedOn = t.CompletedOn.Format(time.UnixDate)
+			}
+		}
+
+		displayTable.AddRow(strconv.Itoa(index), t.Title, completed, t.CreatedOn.Format(time.UnixDate), completedOn, t.LastUpdated.Format(time.UnixDate))
+	}
+	displayTable.Render()
 }
