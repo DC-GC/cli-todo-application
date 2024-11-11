@@ -5,6 +5,8 @@ func main() {
 	todoList := TodoList{}
 	storage := NewStorage[TodoList]("TodoList.json")
 	storage.Load(&todoList)
-	todoList.displayAll()
+	commandFlags := NewCommandFlags()
+	commandFlags.Execute(&todoList)
+	// todoList.displayAll()
 	storage.Save(todoList)
 }
