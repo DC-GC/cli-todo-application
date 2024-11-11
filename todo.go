@@ -79,8 +79,7 @@ func (todoList *TodoList) update(i int, title string) error {
 	}
 
 	t[i].Title = title
-	updateTime := time.Now()
-	t[i].CompletedOn = &updateTime
+	t[i].LastUpdated = time.Now()
 
 	return nil
 }
