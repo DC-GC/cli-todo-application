@@ -66,3 +66,17 @@ func (todoList *TodoList) toggle(i int) error {
 
 	return nil
 }
+
+func (todoList *TodoList) update(i int, title string) error {
+	t := *todoList
+
+	if err := t.validateIndex(i); err != nil {
+		return err
+	}
+
+	t[i].Title = title
+	updateTime := time.Now()
+	t[i].CompletedOn = &updateTime
+
+	return nil
+}
